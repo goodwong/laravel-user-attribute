@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 class Router
 {
     /**
-     * routes
+     * attribute
      * 
      * @return void
      */
@@ -15,6 +15,30 @@ class Router
     {
         Route::namespace('Goodwong\LaravelUserAttribute\Http\Controllers')->group(function () {
             Route::resource('user-attributes', 'UserAttributeController');
+        });
+    }
+
+    /**
+     * attribute group
+     * 
+     * @return void
+     */
+    public static function attributeGroup()
+    {
+        Route::namespace('Goodwong\LaravelUserAttribute\Http\Controllers')->group(function () {
+            Route::resource('user-attribute-groups', 'UserAttributeGroupController');
+        });
+    }
+
+    /**
+     * user value
+     * 
+     * @return void
+     */
+    public static function userValue()
+    {
+        Route::namespace('Goodwong\LaravelUserAttribute\Http\Controllers')->group(function () {
+            Route::resource('user-values', 'UserValueController');
         });
     }
 }
