@@ -158,7 +158,13 @@ class UserDataHandler
      */
     public function getByCode($user_id, $code, $default = null)
     {
-        //
+        $attribute = UserAttribute::where('context', $this->context)
+            ->where('code', $code)
+            ->first();
+        if ($attribute) {
+            return $this->get($user_id, $attribute->id, $default);
+        }
+        return null;
     }
 
     // 历史记录
@@ -173,7 +179,10 @@ class UserDataHandler
      */
     public function history($user_id, $attribute_id)
     {
-        //
+        return UserValue::withTrashed()
+            ->where('user_id', $user_id)
+            ->where('attribute_id', $attribute_id)
+            ->get();
     }
 
     // 批量读取（$attribute_ids 空则自动查询context下所有属性）
@@ -188,7 +197,16 @@ class UserDataHandler
      */
     public function values($user_id, $attribute_ids = [])
     {
-        //
+        if (!$attribute_ids) {
+            $attribute_ids = UserAttribute::where('context', $this->context)->pluck('id')->all();
+        }
+        if (!$attribute_ids) {
+            return collect();
+        }
+
+        return UserValue::where('user_id', $user_id)
+            ->whereIn('attribute_id', $attribute_ids)
+            ->get();
     }
 
     /**
@@ -201,7 +219,16 @@ class UserDataHandler
      */
     public function valuesOfMany($user_ids, $attribute_ids = [])
     {
-        //
+        if (!$attribute_ids) {
+            $attribute_ids = UserAttribute::where('context', $this->context)->pluck('id')->all();
+        }
+        if (!$attribute_ids || !$user_ids) {
+            return collect();
+        }
+
+        return UserValue::whereIn('user_id', $user_ids)
+            ->whereIn('attribute_id', $attribute_ids)
+            ->get();
     }
 
     // 其它的
@@ -215,7 +242,11 @@ class UserDataHandler
      */
     public function count($attribute_id = null)
     {
-        //
+        $query = UserValue::getModel();
+        if ($attribute_id) {
+            $query = $query->where('attribute_id', $attribute_id);
+        }
+        return $query->distinct('user_id')->count('user_id');
     }
 
     /**
