@@ -24,6 +24,11 @@ class CreateUserAttributesTable extends Migration
             $table->jsonb('settings')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('group_id')
+                  ->references('id')->on('user_attribute_groups')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
         });
     }
 
@@ -34,6 +39,10 @@ class CreateUserAttributesTable extends Migration
      */
     public function down()
     {
+        Schema::table('user_attributes', function (Blueprint $table) {
+            $table->dropForeign('user_attributes_group_id_foreign');
+        });
+
         Schema::dropIfExists('user_attributes');
     }
 }
