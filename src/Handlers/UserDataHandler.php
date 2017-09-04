@@ -245,7 +245,15 @@ class UserDataHandler
         $query = UserValue::getModel();
         if ($attribute_id) {
             $query = $query->where('attribute_id', $attribute_id);
+            return $query->distinct('user_id')->count('user_id');
         }
+
+        // count user in current context
+        $attribute_ids = UserAttribute::where('context', $this->context)->pluck('id')->all();
+        if (!$attribute_ids) {
+            return 0;
+        }
+        $query = $query->whereIn('attribute_id', $attribute_ids);
         return $query->distinct('user_id')->count('user_id');
     }
 
@@ -259,7 +267,9 @@ class UserDataHandler
      */
     public function getUserIds($attribute_id, $sort_direction = 'ASC')
     {
-        //
+        return UserValue::where('attribute_id', $attribute_id)
+            ->orderBy('value', $sort_direction)
+            ->pluck('user_id')->all();
     }
 
     /**
@@ -273,7 +283,22 @@ class UserDataHandler
      */
     public function allUserIds($sort_attribute_id = null, $sort_direction = 'ASC')
     {
-        //
+        $attribute_ids = UserAttribute::where('context', $this->context)->pluck('id')->all();
+        if (!$attribute_ids) {
+            return [];
+        }
+
+        // all ids
+        $all_ids = UserValue::whereIn('attribute_id', $attribute_ids)
+            ->distinct('user_id')
+            ->pluck('user_id')->unique()->values()->all();
+        if (!$sort_attribute_id) {
+            return $all_ids;
+        }
+
+        // sort
+        $sorted_ids = $this->getUserIds($sort_attribute_id, $sort_direction);
+        return array_values(array_unique(array_merge($sorted_ids, $all_ids)));
     }
 
     /**
@@ -284,6 +309,13 @@ class UserDataHandler
      */
     public function search($keyword)
     {
-        //
+        $attribute_ids = UserAttribute::where('context', $this->context)->pluck('id')->all();
+        if (!$attribute_ids) {
+            return collect();
+        }
+
+        return UserValue::whereIn('attribute_id', $attribute_ids)
+            ->where('value', 'like', "%{$keyword}%")
+            ->get();
     }
 }
