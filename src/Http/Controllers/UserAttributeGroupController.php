@@ -20,19 +20,19 @@ class UserAttributeGroupController extends Controller
         // 返回指定id列表的数据
         $ids = $request->input('ids');
         if ($ids) {
-            $query->whereIn('id', explode(',', $ids));
+            return $query->whereIn('id', explode(',', $ids))->get();
         }
         // 单个context
         $context = $request->input('context');
         if ($context) {
-            $query->where('context', $context);
+            return $query->where('context', $context)->get();
         }
         // 多个context
         $contexts = $request->input('contexts');
         if ($contexts) {
-            $query->whereIn('context', explode(',', $contexts));
+            return $query->whereIn('context', explode(',', $contexts))->get();
         }
-        return $query->get();
+        return collect();
     }
 
     /**
