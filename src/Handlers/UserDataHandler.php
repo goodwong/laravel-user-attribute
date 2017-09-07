@@ -23,7 +23,7 @@ class UserDataHandler
      * @param  string  $context
      * @return void
      */
-    public function __construct($context)
+    public function __construct($context = null)
     {
         $this->context = $context;
     }
