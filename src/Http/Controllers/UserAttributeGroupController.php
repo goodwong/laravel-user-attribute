@@ -17,8 +17,20 @@ class UserAttributeGroupController extends Controller
     public function index(Request $request)
     {
         $query = UserAttributeGroup::orderBy('id', 'desc');
-        if ($request->has('context')) {
-            $query->where('context', $request->input('context'));
+        // 返回指定id列表的数据
+        $ids = $request->input('ids');
+        if ($ids) {
+            $query->whereIn('id', explode(',', $ids));
+        }
+        // 单个context
+        $context = $request->input('context');
+        if ($context) {
+            $query->where('context', $context);
+        }
+        // 多个context
+        $contexts = $request->input('contexts');
+        if ($contexts) {
+            $query->whereIn('context', explode(',', $contexts));
         }
         return $query->get();
     }

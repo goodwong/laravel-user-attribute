@@ -17,8 +17,20 @@ class UserAttributeController extends Controller
     public function index(Request $request)
     {
         $query = UserAttribute::orderBy('id', 'desc');
-        if ($request->has('context')) {
-            $query->where('context', $request->input('context'));
+        // 返回指定group_id列表的数据
+        $group_ids = $request->input('groups');
+        if ($group_ids) {
+            $query->whereIn('group_id', explode(',', $group_ids));
+        }
+        // 单个context
+        $context = $request->input('context');
+        if ($context) {
+            $query->where('context', $context);
+        }
+        // 多个context
+        $contexts = $request->input('contexts');
+        if ($contexts) {
+            $query->whereIn('context', explode(',', $contexts));
         }
         return $query->get();
     }
