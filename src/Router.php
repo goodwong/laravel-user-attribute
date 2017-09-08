@@ -41,4 +41,16 @@ class Router
             Route::resource('user-values', 'UserValueController');
         });
     }
+
+    /**
+     * user id list
+     * 
+     * @return void
+     */
+    public static function userIdList()
+    {
+        Route::namespace('Goodwong\LaravelUserAttribute\Http\Controllers')->group(function () {
+            Route::resource('user-ids', 'UserIdController');
+        });
+    }
 }
