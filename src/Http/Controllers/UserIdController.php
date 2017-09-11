@@ -19,11 +19,11 @@ class UserIdController extends Controller
     public function index(Request $request)
     {
         // 按属性
-        $attribute_id = $request->input('attribute_id');
+        $attribute_id = $request->input('attribute');
         if ($attribute_id) {
             $attribute = UserAttribute::findOrFail($attribute_id);
             $handler = new UserDataHandler($attribute->context);
-            $user_ids = $handler->getUserIds($attribute_id, $request->input('sort_direction'));
+            $user_ids = $handler->getUserIds($attribute_id, $request->input('sort_order'));
 
             return $this->paginate($user_ids, $request);
         }
@@ -31,7 +31,7 @@ class UserIdController extends Controller
         $context = $request->input('context');
         if ($context) {
             $handler = new UserDataHandler($context);
-            $user_ids = $handler->allUserIds($request->input('sort_attribute_id'), $request->input('sort_direction', 'desc'));
+            $user_ids = $handler->allUserIds($request->input('sort_attribute'), $request->input('sort_order', 'desc'));
 
             return $this->paginate($user_ids, $request);
         }
@@ -51,8 +51,8 @@ class UserIdController extends Controller
         $per_page = $request->input('per_page', 20);
         $chunks = array_chunk($data, $per_page);
         $current_page = $request->input('page', 1);
-        $current_page = max(0, min($current_page, count($chunks) - 1));
-        $slice = $chunks[$current_page];
+        $current_page = max(1, min($current_page, count($chunks)));
+        $slice = $chunks[$current_page - 1];
         return new LengthAwarePaginator($slice, count($data), $per_page, $current_page);
     }
 

@@ -262,14 +262,19 @@ class UserDataHandler
      * 按照某属性获取排序的用户ID
      * 
      * @param  integer  $attribute_id
-     * @param  string  $sort_direction (optional)
+     * @param  string  $sort_order (optional)
      * @erturn array[integer]
      */
-    public function getUserIds($attribute_id, $sort_direction = 'ASC')
+    public function getUserIds($attribute_id, $sort_order = 'ASC')
     {
-        return UserValue::where('attribute_id', $attribute_id)
-            ->orderBy('value', $sort_direction)
-            ->pluck('user_id')->all();
+        $values = UserValue::where('attribute_id', $attribute_id)
+            ->pluck('value', 'user_id')->all();
+        if (strtoupper($sort_order) === 'ASC') {
+            asort($values);
+        } else {
+            arsort($values);
+        }
+        return array_keys($values);
     }
 
     /**
@@ -278,10 +283,10 @@ class UserDataHandler
      *  * 内存排序
      * 
      * @param  integer  $sort_attribute_id (optional)
-     * @param  string  $sort_direction (optional)
+     * @param  string  $sort_order (optional)
      * @erturn array[integer]
      */
-    public function allUserIds($sort_attribute_id = null, $sort_direction = 'ASC')
+    public function allUserIds($sort_attribute_id = null, $sort_order = 'ASC')
     {
         $attribute_ids = UserAttribute::where('context', $this->context)->pluck('id')->all();
         if (!$attribute_ids) {
@@ -291,14 +296,16 @@ class UserDataHandler
         // all ids
         $all_ids = UserValue::whereIn('attribute_id', $attribute_ids)
             ->distinct('user_id')
-            ->pluck('user_id')->unique()->values()->all();
+            ->pluck('user_id')->reverse()->unique()->values()->all();
         if (!$sort_attribute_id) {
             return $all_ids;
         }
 
         // sort
-        $sorted_ids = $this->getUserIds($sort_attribute_id, $sort_direction);
-        return array_values(array_unique(array_merge($sorted_ids, $all_ids)));
+        $sorted_ids = $this->getUserIds($sort_attribute_id, $sort_order);
+        // 处理超出allUserIds范围的userId
+        $intersected_ids = array_intersect($sorted_ids, $all_ids);
+        return array_values(array_unique(array_merge($intersected_ids, $all_ids)));
     }
 
     /**
