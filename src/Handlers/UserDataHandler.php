@@ -37,18 +37,18 @@ class UserDataHandler
      * @param  integer  $user_id
      * @param  integer  $attribute_id
      * @param  mixed  $value
-     * @return void
+     * @return UserValue
      */
     public function set($user_id, $attribute_id, $value)
     {
         $exist = $this->get($user_id, $attribute_id);
         if ($exist && $exist->value == $value) {
-            return;
+            return $exist;
         }
         if ($exist) {
             $exist->delete();
         }
-        UserValue::create(compact('user_id', 'attribute_id', 'value'));
+        return UserValue::create(compact('user_id', 'attribute_id', 'value'));
     }
 
     /**
@@ -62,7 +62,7 @@ class UserDataHandler
      *   * @param  string  $label (optional)
      *   * @param  string  $type (optional)
      *   * @param  string  $group_label (optional)
-     * @return void
+     * @return UserValue
      */
     public function setByCode($user_id, $code, $value, $additional = [])
     {
@@ -103,7 +103,7 @@ class UserDataHandler
      *   * @param  string  $code (optional)
      *   * @param  string  $type (optional)
      *   * @param  string  $group_label (optional)
-     * @return void
+     * @return UserValue
      */
     public function setByLabel($user_id, $label, $value, $additional = [])
     {

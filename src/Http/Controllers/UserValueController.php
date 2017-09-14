@@ -67,7 +67,15 @@ class UserValueController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 单个用户数据
+        $user_id = $request->input('user');
+        $attribute_id = $request->input('attribute');
+        $value = $request->input('value');
+        if ($user_id && $attribute_id && strlen($value)) {
+            $handler = new UserDataHandler();
+            return response()->json($handler->set($user_id, $attribute_id, $value));
+        }
+        abort(422);
     }
 
     /**
