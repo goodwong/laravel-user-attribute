@@ -37,12 +37,13 @@ class UserDataHandler
      * @param  integer  $user_id
      * @param  integer  $attribute_id
      * @param  mixed  $value
+     * @param  string  $mode   append | auto
      * @return UserValue
      */
-    public function set($user_id, $attribute_id, $value)
+    public function set($user_id, $attribute_id, $value, $mode = 'auto')
     {
         $exist = $this->get($user_id, $attribute_id);
-        if ($exist && $exist->value == $value) {
+        if ($exist && $exist->value == $value && $mode === 'auto') {
             return $exist;
         }
         if ($exist) {
@@ -62,6 +63,7 @@ class UserDataHandler
      *   * @param  string  $label (optional)
      *   * @param  string  $type (optional)
      *   * @param  string  $group_label (optional)
+     *   * @param  string  $mode  (default auto)
      * @return UserValue
      */
     public function setByCode($user_id, $code, $value, $additional = [])
@@ -70,7 +72,8 @@ class UserDataHandler
             ->where('code', $code)
             ->first();
         if ($attribute) {
-            return $this->set($user_id, $attribute->id, $value);
+            $mode = data_get($additional, 'mode', 'auto');
+            return $this->set($user_id, $attribute->id, $value, $mode);
         }
 
         // create attribute group
@@ -103,6 +106,7 @@ class UserDataHandler
      *   * @param  string  $code (optional)
      *   * @param  string  $type (optional)
      *   * @param  string  $group_label (optional)
+     *   * @param  string  $mode  (default auto)
      * @return UserValue
      */
     public function setByLabel($user_id, $label, $value, $additional = [])
@@ -111,7 +115,8 @@ class UserDataHandler
             ->where('label', $label)
             ->first();
         if ($attribute) {
-            return $this->set($user_id, $attribute->id, $value);
+            $mode = data_get($additional, 'mode', 'auto');
+            return $this->set($user_id, $attribute->id, $value, $mode);
         }
 
         // create attribute group
@@ -140,10 +145,9 @@ class UserDataHandler
      * 
      * @param  integer  $user_id
      * @param  integer  $attribute_id
-     * @param  string  $default (optional)
      * @return  UserValue
      */
-    public function get($user_id, $attribute_id, $default = null) // ignore any context
+    public function get($user_id, $attribute_id) // ignore any context
     {
         return UserValue::where('user_id', $user_id)->where('attribute_id', $attribute_id)->first();
     }
@@ -153,16 +157,15 @@ class UserDataHandler
      * 
      * @param  integer  $user_id
      * @param  string  $code
-     * @param  string  $default (optional)
      * @return  UserValue
      */
-    public function getByCode($user_id, $code, $default = null)
+    public function getByCode($user_id, $code)
     {
         $attribute = UserAttribute::where('context', $this->context)
             ->where('code', $code)
             ->first();
         if ($attribute) {
-            return $this->get($user_id, $attribute->id, $default);
+            return $this->get($user_id, $attribute->id);
         }
         return null;
     }
