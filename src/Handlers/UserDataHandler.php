@@ -275,6 +275,7 @@ class UserDataHandler
     public function history($user_id, $attribute_id)
     {
         return UserValue::withTrashed()
+            ->orderBy('id', 'desc')
             ->where('user_id', $user_id)
             ->where('attribute_id', $attribute_id)
             ->get();
