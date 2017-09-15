@@ -18,6 +18,7 @@ class CreateUserValuesTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('attribute_id');
             $table->string('value');
+            $table->unsignedInteger('reviser_id')->nullable()->comment('记录修改者ID');
             $table->timestamps();
             $table->softDeletes();
 

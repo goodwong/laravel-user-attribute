@@ -26,6 +26,7 @@ class UserDataHandler
     public function __construct($context = null)
     {
         $this->context = $context;
+        $this->reviser_id = request()->user() ? request()->user()->id : null;
     }
 
     // 写入
@@ -49,7 +50,8 @@ class UserDataHandler
         if ($exist) {
             $exist->delete();
         }
-        return UserValue::create(compact('user_id', 'attribute_id', 'value'));
+        $reviser_id = $this->reviser_id;
+        return UserValue::create(compact('user_id', 'attribute_id', 'value', 'reviser_id'));
     }
 
     /**
@@ -179,7 +181,8 @@ class UserDataHandler
             $exist->delete();
         }
         $value = $exist ? $exist->value + 1 : 1;
-        return UserValue::create(compact('user_id', 'attribute_id', 'value'));
+        $reviser_id = $this->reviser_id;
+        return UserValue::create(compact('user_id', 'attribute_id', 'value', 'reviser_id'));
     }
 
     /**

@@ -23,6 +23,7 @@ class UserValue extends Model
         'user_id',
         'attribute_id',
         'value',
+        'reviser_id',
     ];
 
     /**
