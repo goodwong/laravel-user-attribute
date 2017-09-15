@@ -36,7 +36,7 @@ class UserDataHandler
      * 
      * @param  integer  $user_id
      * @param  integer  $attribute_id
-     * @param  mixed  $value
+     * @param  string  $value
      * @param  string  $mode   append | auto
      * @return UserValue
      */
@@ -58,7 +58,7 @@ class UserDataHandler
      * 
      * @param  integer  $user_id
      * @param  string  $code
-     * @param  mixed  $value
+     * @param  string  $value
      * @param  array  $additional (optional)
      *   * @param  string  $label (optional)
      *   * @param  string  $type (optional)
@@ -101,7 +101,7 @@ class UserDataHandler
      * 
      * @param  integer  $user_id
      * @param  string  $label
-     * @param  mixed  $value
+     * @param  string  $value
      * @param  array  $additional (optional)
      *   * @param  string  $code (optional)
      *   * @param  string  $type (optional)
@@ -148,7 +148,7 @@ class UserDataHandler
      *   * @param  string  $group_label (optional)
      * @return UserValue
      */
-    public function increaseByCode($user_id, $code, $additional = [])
+    public function increase($user_id, $code, $additional = [])
     {
         // find or create attribute
         $attribute = UserAttribute::where('context', $this->context)
@@ -180,6 +180,54 @@ class UserDataHandler
         }
         $value = $exist ? $exist->value + 1 : 1;
         return UserValue::create(compact('user_id', 'attribute_id', 'value'));
+    }
+
+    /**
+     * add tag
+     * 
+     * @param  integer  $user_id
+     * @param  string  $code
+     * @param  string  $tag
+     * @param  array  $additional (optional)
+     *   * @param  string  $label (optional)
+     *   * @param  string  $group_label (optional)
+     * @return UserValue
+     */
+    public function addTag($user_id, $code, $tag, $additional = [])
+    {
+        // find or create attribute
+        $attribute = UserAttribute::where('context', $this->context)
+            ->where('code', $code)
+            ->first();
+        if (!$attribute) {
+            // create attribute group
+            $group_label = data_get($additional, 'group_label', '默认');
+            $group = UserAttributeGroup::firstOrCreate([
+                'label' => $group_label, 
+                'context' => $this->context,
+            ]);
+    
+            // create attribute
+            $attribute = UserAttribute::create([
+                'context' => $this->context, 
+                'group_id' => $group->id, 
+                'label' => data_get($additional, 'label', $code),
+                'code' => $code,
+                'type' => 'checkbox',
+            ]);
+        }
+
+        // add tag
+        $attribute_id = $attribute->id;
+        $exist = $this->get($user_id, $attribute_id);
+        $value = $exist ? $exist->value . '|' . $tag : $tag;
+        $tags = explode('|', $value);
+        $tags = array_map(function ($v) { return trim($v); }, $tags);
+        sort($tags);
+        $tags = array_unique($tags);
+        $value = implode('|', $tags);
+
+        return $this->set($user_id, $attribute->id, $value);
     }
 
     // 读出
