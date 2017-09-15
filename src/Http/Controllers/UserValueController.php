@@ -71,9 +71,9 @@ class UserValueController extends Controller
         $user_id = $request->input('user');
         $attribute_id = $request->input('attribute');
         $value = $request->input('value');
-        if ($user_id && $attribute_id && strlen($value)) {
+        if ($user_id && $attribute_id) {
             $handler = new UserDataHandler();
-            return response()->json($handler->set($user_id, $attribute_id, $value));
+            return response()->json($handler->set($user_id, $attribute_id, $value ?: ''));
         }
         abort(422);
     }
