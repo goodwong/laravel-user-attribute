@@ -394,8 +394,9 @@ class UserDataHandler
 
         // all ids
         $all_ids = UserValue::whereIn('attribute_id', $attribute_ids)
-            ->distinct('user_id')
-            ->pluck('user_id')->reverse()->unique()->values()->all();
+            ->orderBy('id', 'desc')
+            ->pluck('user_id')
+            ->unique()->values()->all();
         if (!$sort_attribute_id) {
             return $all_ids;
         }
