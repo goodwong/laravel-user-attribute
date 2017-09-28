@@ -1,0 +1,25 @@
+{
+    "name": "goodwong/laravel-user-attribute",
+    "type": "library",
+    "authors": [
+        {
+            "name": "william",
+            "email": "goodwong@foxmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Goodwong\\LaravelUserAttribute\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Goodwong\\LaravelUserAttribute\\UserAttributeServiceProvider"
+            ]
+        }
+    }
+}
