@@ -425,4 +425,29 @@ class UserDataHandler
             ->where('value', 'like', "%{$keyword}%")
             ->get();
     }
+
+    /**
+     * update options for radio / checkbox type
+     * 
+     * @param  string|UserAttribute  $attribute
+     * @return void
+     */
+    public function updateOptions($attribute)
+    {
+        if (is_numeric($attribute)) {
+            $attribute = UserAttribute::find($attribute);
+        }
+
+        $values = UserValue::where('attribute_id', $attribute->id)
+            ->pluck('value')
+            ->unique()
+            ->implode('|');
+        $exists = implode('|', (array)data_get($attribute, 'settings.options', []));
+        $all = array_values(array_unique(array_filter(explode('|', $exists . '|' . $values))));
+
+        $settings = $attribute->settings ?: (object)[];
+        $settings->options = $all;
+        $attribute->settings = $settings;
+        $attribute->save();
+    }
 }

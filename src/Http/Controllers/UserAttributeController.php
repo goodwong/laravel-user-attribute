@@ -3,6 +3,7 @@
 namespace Goodwong\LaravelUserAttribute\Http\Controllers;
 
 use Goodwong\LaravelUserAttribute\Entities\UserAttribute;
+use Goodwong\LaravelUserAttribute\Handlers\UserDataHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -64,6 +65,9 @@ class UserAttributeController extends Controller
      */
     public function show(UserAttribute $userAttribute)
     {
+        if ($userAttribute->type === 'radio' || $userAttribute->type === 'checkbox') {
+            (new UserDataHandler())->updateOptions($userAttribute);
+        }
         return $userAttribute;
     }
 

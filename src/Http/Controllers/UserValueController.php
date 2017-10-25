@@ -43,7 +43,7 @@ class UserValueController extends Controller
         $attribute_id = $request->input('attribute');
         if ($user_id && $attribute_id) {
             $handler = new UserDataHandler();
-            return $handler->history($user_id, $attribute_id);
+            return $handler->history($user_id, $attribute_id)->take(10);
         }
         // nothing
         return collect();
