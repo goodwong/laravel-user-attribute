@@ -444,6 +444,7 @@ class UserDataHandler
             ->implode('|');
         $exists = implode('|', (array)data_get($attribute, 'settings.options', []));
         $all = array_values(array_unique(array_filter(explode('|', $exists . '|' . $values))));
+        sort($all);
 
         $settings = $attribute->settings ?: (object)[];
         $settings->options = $all;
