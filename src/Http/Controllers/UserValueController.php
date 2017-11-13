@@ -18,11 +18,12 @@ class UserValueController extends Controller
     public function index(Request $request)
     {
         // 搜索
-        $keyword = $request->input('search');
-        $context = $request->input('context');
-        if ($keyword && $context) {
+        $context = $request->input('context', null);
+        $attributes = $request->input('attributes');
+        $keyword = $request->input('keyword');
+        if ($keyword) {
             $handler = new UserDataHandler($context);
-            return $handler->search($keyword);
+            return $handler->search(explode(',', $attributes), $keyword);
         }
         // 多个用户数据（数据矩阵）
         $user_ids = $request->input('users');

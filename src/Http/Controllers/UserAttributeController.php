@@ -18,6 +18,11 @@ class UserAttributeController extends Controller
     public function index(Request $request)
     {
         $query = UserAttribute::orderBy('id', 'desc');
+        // 返回指定id的属性
+        $ids = $request->input('ids');
+        if ($ids) {
+            return $query->whereIn('id', explode(',', $ids))->get();
+        }
         // 返回指定group_id列表的数据
         $group_ids = $request->input('groups');
         if ($group_ids) {
@@ -32,6 +37,13 @@ class UserAttributeController extends Controller
         $contexts = $request->input('contexts');
         if ($contexts) {
             return $query->whereIn('context', explode(',', $contexts))->get();
+        }
+        // search by code
+        $codes = $request->input('codes');
+        $context = $request->input('context');
+        if ($codes) {
+            $query = $query->whereIn('code', explode(',', $codes));
+            return $context ? $query->whereIn('context', ['global', $context])->get() : $query->get();
         }
         return collect();
     }

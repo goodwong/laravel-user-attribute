@@ -27,11 +27,22 @@ class UserIdController extends Controller
 
             return $this->paginate($user_ids, $request);
         }
+        // filters
+        $filters = $request->input('filters');
+        $sort_attribute = $request->input('sort_attribute');
+        $sort_order = $request->input('sort_order', 'desc');
+        if ($filters) {
+            $handler = new UserDataHandler();
+            $user_ids = $handler->filterUserIds($filters, $sort_attribute, $sort_order);
+            return $this->paginate($user_ids, $request);
+        }
         // 按场景
         $context = $request->input('context');
+        $sort_attribute = $request->input('sort_attribute');
+        $sort_order = $request->input('sort_order', 'desc');
         if ($context) {
             $handler = new UserDataHandler($context);
-            $user_ids = $handler->allUserIds($request->input('sort_attribute'), $request->input('sort_order', 'desc'));
+            $user_ids = $handler->allUserIds($sort_attribute, $sort_order);
 
             return $this->paginate($user_ids, $request);
         }

@@ -377,6 +377,40 @@ class UserDataHandler
     }
 
     /**
+     * filter user ids
+     * 
+     * @param  array  $filters // { attribute_id_1: [option1, option2] }
+     * @param  integer  $sort_attribute_id (optional)
+     * @param  string  $sort_order (optional)
+     * @return array[integer]
+     */
+    public function filterUserIds($filters, $sort_attribute_id = null, $sort_order = 'ASC')
+    {
+        $all_ids = [];
+        foreach ($filters as $attribute_id => $options) {
+            $group_ids = [];
+            foreach ($options as $option) {
+                $ids = UserValue::where('attribute_id', $attribute_id)
+                    ->where('value', 'like', "%|{$option}|%")
+                    ->orWhere('value', 'like', "{$option}|%")
+                    ->orWhere('value', 'like', "|{$option}%")
+                    ->orWhere('value', "{$option}")
+                    ->pluck('user_id')->all();
+                $group_ids = array_merge($group_ids, $ids);
+            }
+            $all_ids = $all_ids ? array_intersect($all_ids, $group_ids) : $group_ids;
+        }
+        if (!$sort_attribute_id) {
+            return $all_ids;
+        }
+        // sort
+        $sorted_ids = $this->getUserIds($sort_attribute_id, $sort_order);
+        // 处理超出allUserIds范围的userId
+        $intersected_ids = array_intersect($sorted_ids, $all_ids);
+        return array_values(array_unique(array_merge($intersected_ids, $all_ids)));
+    }
+
+    /**
      * get all user id
      *  * 所有用户ID，按照某属性排序的
      *  * 内存排序
@@ -412,18 +446,30 @@ class UserDataHandler
      * search by keyword
      * 
      * @param  string  $keyword
+     * @param  array  $attribute_ids
      * @return Collection[UserAttribute]
      */
-    public function search($keyword)
+    public function search($attribute_ids, $keyword)
     {
-        $attribute_ids = UserAttribute::where('context', $this->context)->pluck('id')->all();
-        if (!$attribute_ids) {
+        if (strlen($keyword) < 2) {
             return collect();
         }
 
-        return UserValue::whereIn('attribute_id', $attribute_ids)
-            ->where('value', 'like', "%{$keyword}%")
-            ->get();
+        $query = UserValue::getModel()->orderBy('created_at', 'desc');
+
+        // limit context
+        if ($this->context) {
+            $userIdsInContext = $this->allUserIds();
+            if (!$userIdsInContext) {
+                return collect();
+            }
+            $query = $query->whereIn('user_id', $userIdsInContext);
+        }
+
+        // limit attributes
+        $query = $query->whereIn('attribute_id', $attribute_ids);
+
+        return $query->where('value', 'like', "%{$keyword}%")->get();
     }
 
     /**
