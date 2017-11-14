@@ -390,12 +390,26 @@ class UserDataHandler
         foreach ($filters as $attribute_id => $options) {
             $group_ids = [];
             foreach ($options as $option) {
-                $ids = UserValue::where('attribute_id', $attribute_id)
-                    ->where('value', 'like', "%|{$option}|%")
-                    ->orWhere('value', 'like', "{$option}|%")
-                    ->orWhere('value', 'like', "|{$option}%")
-                    ->orWhere('value', "{$option}")
-                    ->pluck('user_id')->all();
+                if ($option === '<today>') {
+                    $ids = UserValue::where('attribute_id', $attribute_id)
+                        ->where('created_at', '>=', date('Y-m-d', strtotime('today')))
+                        ->pluck('user_id')->all();
+                } elseif ($option === '<yestoday>') {
+                    $ids = UserValue::where('attribute_id', $attribute_id)
+                        ->where('created_at', '>=', date('Y-m-d', strtotime('today-1day')))
+                        ->where('created_at', '<', date('Y-m-d', strtotime('today')))
+                        ->pluck('user_id')->all();
+                } elseif ($option === '<any>') {
+                    $ids = UserValue::where('attribute_id', $attribute_id)
+                        ->pluck('user_id')->all();
+                } else {
+                    $ids = UserValue::where('attribute_id', $attribute_id)
+                        ->where('value', 'like', "%|{$option}|%")
+                        ->orWhere('value', 'like', "{$option}|%")
+                        ->orWhere('value', 'like', "|{$option}%")
+                        ->orWhere('value', "{$option}")
+                        ->pluck('user_id')->all();
+                }
                 $group_ids = array_merge($group_ids, $ids);
             }
             $all_ids = $all_ids ? array_intersect($all_ids, $group_ids) : $group_ids;

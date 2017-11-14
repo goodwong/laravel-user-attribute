@@ -63,7 +63,7 @@ class UserIdController extends Controller
         $chunks = array_chunk($data, $per_page);
         $current_page = $request->input('page', 1);
         $current_page = max(1, min($current_page, count($chunks)));
-        $slice = $chunks[$current_page - 1];
+        $slice = data_get($chunks, $current_page - 1, []);
         return new LengthAwarePaginator($slice, count($data), $per_page, $current_page);
     }
 
