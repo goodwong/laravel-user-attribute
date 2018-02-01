@@ -39,6 +39,23 @@ class UserValueController extends Controller
             $handler = new UserDataHandler();
             return $handler->values($user_id, explode(',', $attribute_ids));
         }
+        // 单用户数据，按code搜索
+        $user_id = $request->input('user');
+        $codes = $request->input('codes');
+        if ($user_id && $codes) {
+            $values = array_map(function ($code) use ($user_id) {
+                $code = explode(':', $code);
+                if (count($code) < 2) {
+                    return null;
+                }
+                $value = (new UserDataHandler($code[0]))->getByCode($user_id, $code[1]);
+                if ($value) {
+                    $value->attribute_code = implode(':', $code);
+                }
+                return $value;
+            }, (array)explode(',', $codes));
+            return array_filter($values);
+        }
         // 数据历史
         $user_id = $request->input('user');
         $attribute_id = $request->input('attribute');
@@ -75,6 +92,15 @@ class UserValueController extends Controller
         if ($user_id && $attribute_id) {
             $handler = new UserDataHandler();
             return response()->json($handler->set($user_id, $attribute_id, $value ?: ''));
+        }
+        // by context & code
+        $user_id = $request->input('user');
+        $context = $request->input('context');
+        $code = $request->input('code');
+        $value = $request->input('value');
+        if ($user_id && $context && $code) {
+            $handler = new UserDataHandler($context);
+            return response()->json($handler->setByCode($user_id, $code, $value ?: ''));
         }
         abort(422);
     }
