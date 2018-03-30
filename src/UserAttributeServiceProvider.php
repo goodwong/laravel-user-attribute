@@ -1,6 +1,6 @@
 <?php
 
-namespace Goodwong\LaravelUserAttribute;
+namespace Goodwong\UserAttribute;
 
 use Illuminate\Support\ServiceProvider;
 

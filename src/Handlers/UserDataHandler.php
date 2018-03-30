@@ -1,10 +1,10 @@
 <?php
 
-namespace Goodwong\LaravelUserAttribute\Handlers;
+namespace Goodwong\UserAttribute\Handlers;
 
-use Goodwong\LaravelUserAttribute\Entities\UserAttributeGroup;
-use Goodwong\LaravelUserAttribute\Entities\UserAttribute;
-use Goodwong\LaravelUserAttribute\Entities\UserValue;
+use Goodwong\UserAttribute\Entities\UserAttributeGroup;
+use Goodwong\UserAttribute\Entities\UserAttribute;
+use Goodwong\UserAttribute\Entities\UserValue;
 
 class UserDataHandler
 {
@@ -379,7 +379,7 @@ class UserDataHandler
     /**
      * filter user ids
      * 
-     * @param  array  $filters // { attribute_id_1: [option1, option2] }
+     * @param  array  $filters // [{ attribute_id_1: [option1, option2] }, ...]
      * @param  integer  $sort_attribute_id (optional)
      * @param  string  $sort_order (optional)
      * @return array[integer]

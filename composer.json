@@ -10,7 +10,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Goodwong\\LaravelUserAttribute\\": "src/"
+            "Goodwong\\UserAttribute\\": "src/"
         }
     },
     "minimum-stability": "stable",
@@ -18,7 +18,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Goodwong\\LaravelUserAttribute\\UserAttributeServiceProvider"
+                "Goodwong\\UserAttribute\\UserAttributeServiceProvider"
             ]
         }
     }

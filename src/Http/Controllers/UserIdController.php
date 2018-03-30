@@ -1,9 +1,9 @@
 <?php
 
-namespace Goodwong\LaravelUserAttribute\Http\Controllers;
+namespace Goodwong\UserAttribute\Http\Controllers;
 
-use Goodwong\LaravelUserAttribute\Entities\UserAttribute;
-use Goodwong\LaravelUserAttribute\Handlers\UserDataHandler;
+use Goodwong\UserAttribute\Entities\UserAttribute;
+use Goodwong\UserAttribute\Handlers\UserDataHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;

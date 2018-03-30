@@ -1,9 +1,9 @@
 <?php
 
-namespace Goodwong\LaravelUserAttribute\Http\Controllers;
+namespace Goodwong\UserAttribute\Http\Controllers;
 
-use Goodwong\LaravelUserAttribute\Entities\UserAttribute;
-use Goodwong\LaravelUserAttribute\Handlers\UserDataHandler;
+use Goodwong\UserAttribute\Entities\UserAttribute;
+use Goodwong\UserAttribute\Handlers\UserDataHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -72,7 +72,7 @@ class UserAttributeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Goodwong\LaravelUserAttribute\Entities\UserAttribute  $userAttribute
+     * @param  \Goodwong\UserAttribute\Entities\UserAttribute  $userAttribute
      * @return \Illuminate\Http\Response
      */
     public function show(UserAttribute $userAttribute)
@@ -86,7 +86,7 @@ class UserAttributeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Goodwong\LaravelUserAttribute\Entities\UserAttribute  $userAttribute
+     * @param  \Goodwong\UserAttribute\Entities\UserAttribute  $userAttribute
      * @return \Illuminate\Http\Response
      */
     public function edit(UserAttribute $userAttribute)
@@ -98,7 +98,7 @@ class UserAttributeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Goodwong\LaravelUserAttribute\Entities\UserAttribute  $userAttribute
+     * @param  \Goodwong\UserAttribute\Entities\UserAttribute  $userAttribute
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, UserAttribute $userAttribute)
@@ -110,7 +110,7 @@ class UserAttributeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Goodwong\LaravelUserAttribute\Entities\UserAttribute  $userAttribute
+     * @param  \Goodwong\UserAttribute\Entities\UserAttribute  $userAttribute
      * @return \Illuminate\Http\Response
      */
     public function destroy(UserAttribute $userAttribute)
