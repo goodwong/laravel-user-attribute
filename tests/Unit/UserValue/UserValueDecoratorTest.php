@@ -43,7 +43,7 @@ class UserValueDecoratorTest extends TestCase
         // force write
         $user->code('telephone')->value('13410584620', true);
         $this->assertEquals(count($user->code('telephone')->history()), 3);
-        dump($user->code('telephone')->history()->toArray());
+        // dump($user->code('telephone')->history()->toArray());
 
         // object type
         $object = (object)['name' => 'william', 'sex' => 'male', 'age' => 29];
