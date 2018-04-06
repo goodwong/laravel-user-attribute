@@ -382,6 +382,8 @@ class UserValueDecorator
             $old = [];
         }
         array_push($old, $item);
+        $old = array_map(function ($v) { return trim($v); }, $old);
+        sort($old);
         $value = array_unique($old);
         $this->setValue($value);
         // 清空属性
@@ -427,8 +429,12 @@ class UserValueDecorator
         }
 
         // 查询数据
-        $values = $this->valueModel()->whereIn('attribute_id', array_filter($this->attribute))
-            ->pluck('value', 'attribute_id');
+        if (array_filter($this->attribute)) {
+            $values = $this->valueModel()->whereIn('attribute_id', array_filter($this->attribute))
+                ->pluck('value', 'attribute_id');
+        } else {
+            $values = [];
+        }
         foreach ($this->attribute as $code => $attribute) {
             $value = isset($values[$attribute]) ? unserialize($values[$attribute]) : null;
             if ($byCode) {

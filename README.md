@@ -1,4 +1,4 @@
-# laravel-user-attribute
+# laravel-user-value
 
 
 ```php
@@ -83,24 +83,30 @@ $user->code('logs')->history()
 
 
 ///////////////
-// 用户列表操作
+// 用户内容
 ///////////////
 $handler = UserValue::context('global');
 
 // 搜索
-$handler->search('测试', 'name') // 在 name 里面搜索“测试”
-$handler->search('测试', ['name', 'telephone']) // 在 name/telephone 里面搜索“测试”
-$handler->search('测试', 25) // 在 属性25... 里面搜索“测试”
-$handler->search('测试', [25, 34]) // 在 属性25/34... 里面搜索“测试”
+$handler->code('name')->search('测试') // 在 name 里面搜索“测试”
+$handler->code(['name', 'telephone'])->search('测试') // 在 name/telephone 里面搜索“测试”
+$handler->attribute(25)->search('测试') // 在 属性25... 里面搜索“测试”
+$handler->attribute([25, 34])->search('测试') // 在 属性25/34... 里面搜索“测试”
 // 返回：[{ user_id, reviser_id, attribute_id, value, created_at }]
 
 // 查询多人的数据（适用于CRM大表格）
+$handler->code(['name', 'telephone'])->valuesOfMany($userIds = [1, 2, 3, 4, 5]);
 $handler->attribute([1, 2, 3, 4])->valuesOfMany($userIds = [1, 2, 3, 4, 5]);
 // 返回：[{ user_id, reviser_id, attribute_id, value, created_at }]
 
 
 
-// 用户列表
+
+///////////////
+// 用户列表操作
+///////////////
+$handler = UserValue::context('global');
+
 UserValue::context('campaign_3')
     ->users()
     // 返回：[1, 2, 3, 4, ...., 100]
@@ -122,12 +128,13 @@ UserValue::context('campaign_3')
 
 // 获取某个属性下都有值用户
 UserValue::context('campaign_3')
-    // 属性用户
-    ->usersOf('submit@form_13') // ->usersOf(28)
-    // 返回：[1, 2, 3, 4]
+    ->code('submit@form_13') // ->attribute(28)
+    ->sortByTime('asc')
+    ->users()
 
 // 过滤
 UserValue::context('campaign_3')
+    ->filter('颜色', '绿色')
     ->filter('颜色', ['红色', '绿色'])
     ->filter(29, ['川味', '湘赣味']) // 多次调用，用与多列同时过滤
     ->users()
@@ -135,7 +142,7 @@ UserValue::context('campaign_3')
 // 综合
 UserValue::context('campaign_3')
     ->dateRange('2018-3-23')
-    ->sortByValue('name', 'asc')
+    ->sortByValue('name', 'asc') // ->sortByValue(12, 'asc')
     ->users()
 
 

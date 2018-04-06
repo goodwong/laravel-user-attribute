@@ -26,7 +26,7 @@ class UserDataHandler
     public function __construct($context = null)
     {
         $this->context = $context;
-        $this->reviser_id = request()->user() ? request()->user()->id : null;
+        $this->reviser_id = request()->user()->id ?? null;
     }
 
     // 写入
