@@ -1,5 +1,5 @@
 {
-    "name": "goodwong/laravel-user-attribute",
+    "name": "goodwong/laravel-user-value",
     "type": "library",
     "authors": [
         {
@@ -10,7 +10,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Goodwong\\UserAttribute\\": "src/"
+            "Goodwong\\UserValue\\": "src/"
         }
     },
     "minimum-stability": "stable",
@@ -18,7 +18,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Goodwong\\UserAttribute\\UserAttributeServiceProvider"
+                "Goodwong\\UserValue\\UserValueServiceProvider"
             ]
         }
     }

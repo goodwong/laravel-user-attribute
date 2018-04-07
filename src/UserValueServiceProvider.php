@@ -1,10 +1,10 @@
 <?php
 
-namespace Goodwong\UserAttribute;
+namespace Goodwong\UserValue;
 
 use Illuminate\Support\ServiceProvider;
 
-class UserAttributeServiceProvider extends ServiceProvider
+class UserValueServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.

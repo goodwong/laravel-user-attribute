@@ -1,6 +1,6 @@
 <?php
 
-namespace Goodwong\UserAttribute;
+namespace Goodwong\UserValue;
 
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +13,7 @@ class Router
      */
     public static function attribute()
     {
-        Route::namespace('Goodwong\UserAttribute\Http\Controllers')->group(function () {
+        Route::namespace('Goodwong\UserValue\Http\Controllers')->group(function () {
             Route::resource('user-attributes', 'UserAttributeController');
         });
     }
@@ -25,7 +25,7 @@ class Router
      */
     public static function attributeGroup()
     {
-        Route::namespace('Goodwong\UserAttribute\Http\Controllers')->group(function () {
+        Route::namespace('Goodwong\UserValue\Http\Controllers')->group(function () {
             Route::resource('user-attribute-groups', 'UserAttributeGroupController');
         });
     }
@@ -37,7 +37,7 @@ class Router
      */
     public static function userValue()
     {
-        Route::namespace('Goodwong\UserAttribute\Http\Controllers')->group(function () {
+        Route::namespace('Goodwong\UserValue\Http\Controllers')->group(function () {
             Route::resource('user-values', 'UserValueController');
         });
     }
@@ -49,7 +49,7 @@ class Router
      */
     public static function userIdList()
     {
-        Route::namespace('Goodwong\UserAttribute\Http\Controllers')->group(function () {
+        Route::namespace('Goodwong\UserValue\Http\Controllers')->group(function () {
             Route::resource('user-ids', 'UserIdController');
         });
     }

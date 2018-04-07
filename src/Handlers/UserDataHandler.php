@@ -1,10 +1,10 @@
 <?php
 
-namespace Goodwong\UserAttribute\Handlers;
+namespace Goodwong\UserValue\Handlers;
 
-use Goodwong\UserAttribute\Entities\UserAttributeGroup;
-use Goodwong\UserAttribute\Entities\UserAttribute;
-use Goodwong\UserAttribute\Entities\UserValue;
+use Goodwong\UserValue\Entities\UserAttributeGroup;
+use Goodwong\UserValue\Entities\UserAttribute;
+use Goodwong\UserValue\Entities\UserValue;
 
 class UserDataHandler
 {

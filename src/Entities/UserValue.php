@@ -1,6 +1,6 @@
 <?php
 
-namespace Goodwong\UserAttribute\Entities;
+namespace Goodwong\UserValue\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

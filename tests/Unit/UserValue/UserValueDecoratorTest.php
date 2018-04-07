@@ -5,10 +5,10 @@ namespace Tests\Unit\UserValue;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Goodwong\UserAttribute\UserValue;
-use Goodwong\UserAttribute\Entities\UserValue as Value;
-use Goodwong\UserAttribute\Entities\UserAttribute as Attribute;
-use Goodwong\UserAttribute\Entities\UserAttributeGroup as AttributeGroup;
+use Goodwong\UserValue\UserValue;
+use Goodwong\UserValue\Entities\UserValue as Value;
+use Goodwong\UserValue\Entities\UserAttribute as Attribute;
+use Goodwong\UserValue\Entities\UserAttributeGroup as AttributeGroup;
 
 class UserValueDecoratorTest extends TestCase
 {

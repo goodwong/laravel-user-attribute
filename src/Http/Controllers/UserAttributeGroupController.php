@@ -1,8 +1,8 @@
 <?php
 
-namespace Goodwong\UserAttribute\Http\Controllers;
+namespace Goodwong\UserValue\Http\Controllers;
 
-use Goodwong\UserAttribute\Entities\UserAttributeGroup;
+use Goodwong\UserValue\Entities\UserAttributeGroup;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -59,7 +59,7 @@ class UserAttributeGroupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Goodwong\UserAttribute\Entities\UserAttributeGroup  $userAttributeGroup
+     * @param  \Goodwong\UserValue\Entities\UserAttributeGroup  $userAttributeGroup
      * @return \Illuminate\Http\Response
      */
     public function show(UserAttributeGroup $userAttributeGroup)
@@ -70,7 +70,7 @@ class UserAttributeGroupController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Goodwong\UserAttribute\Entities\UserAttributeGroup  $userAttributeGroup
+     * @param  \Goodwong\UserValue\Entities\UserAttributeGroup  $userAttributeGroup
      * @return \Illuminate\Http\Response
      */
     public function edit(UserAttributeGroup $userAttributeGroup)
@@ -82,7 +82,7 @@ class UserAttributeGroupController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Goodwong\UserAttribute\Entities\UserAttributeGroup  $userAttributeGroup
+     * @param  \Goodwong\UserValue\Entities\UserAttributeGroup  $userAttributeGroup
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, UserAttributeGroup $userAttributeGroup)
@@ -94,7 +94,7 @@ class UserAttributeGroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Goodwong\UserAttribute\Entities\UserAttributeGroup  $userAttributeGroup
+     * @param  \Goodwong\UserValue\Entities\UserAttributeGroup  $userAttributeGroup
      * @return \Illuminate\Http\Response
      */
     public function destroy(UserAttributeGroup $userAttributeGroup)

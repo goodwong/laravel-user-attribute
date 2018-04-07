@@ -1,9 +1,9 @@
 <?php
 
-namespace Goodwong\UserAttribute;
+namespace Goodwong\UserValue;
 
-use Goodwong\UserAttribute\Handlers\UserValueDecorator;
-use Goodwong\UserAttribute\Handlers\UserValueHandler;
+use Goodwong\UserValue\Handlers\UserValueDecorator;
+use Goodwong\UserValue\Handlers\UserValueHandler;
 
 class UserValue
 {
@@ -11,7 +11,7 @@ class UserValue
      * decorate user
      * 
      * @param  int  $user_id
-     * @return \Goodwong\UserAttribute\Handlers\UserValueDecorator
+     * @return \Goodwong\UserValue\Handlers\UserValueDecorator
      */
     public static function user (int $user_id)
     {
@@ -22,7 +22,7 @@ class UserValue
      * set context and instantiate ValueHandler
      * 
      * @param  string  $context
-     * @return \Goodwong\UserAttribute\Handlers\UserValueHandler
+     * @return \Goodwong\UserValue\Handlers\UserValueHandler
      */
     public static function context (string $context)
     {

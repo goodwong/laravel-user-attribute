@@ -1,9 +1,9 @@
 <?php
 
-namespace Goodwong\UserAttribute\Http\Controllers;
+namespace Goodwong\UserValue\Http\Controllers;
 
-use Goodwong\UserAttribute\Entities\UserValue;
-use Goodwong\UserAttribute\Handlers\UserDataHandler;
+use Goodwong\UserValue\Entities\UserValue;
+use Goodwong\UserValue\Handlers\UserDataHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -108,7 +108,7 @@ class UserValueController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Goodwong\UserAttribute\Entities\UserValue  $userValue
+     * @param  \Goodwong\UserValue\Entities\UserValue  $userValue
      * @return \Illuminate\Http\Response
      */
     public function show(UserValue $userValue)
@@ -119,7 +119,7 @@ class UserValueController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Goodwong\UserAttribute\Entities\UserValue  $userValue
+     * @param  \Goodwong\UserValue\Entities\UserValue  $userValue
      * @return \Illuminate\Http\Response
      */
     public function edit(UserValue $userValue)
@@ -131,7 +131,7 @@ class UserValueController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Goodwong\UserAttribute\Entities\UserValue  $userValue
+     * @param  \Goodwong\UserValue\Entities\UserValue  $userValue
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, UserValue $userValue)
@@ -142,7 +142,7 @@ class UserValueController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Goodwong\UserAttribute\Entities\UserValue  $userValue
+     * @param  \Goodwong\UserValue\Entities\UserValue  $userValue
      * @return \Illuminate\Http\Response
      */
     public function destroy(UserValue $userValue)
