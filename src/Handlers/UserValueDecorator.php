@@ -186,7 +186,6 @@ class UserValueDecorator
     private function setValue ($value, $forceWrite = false)
     {
         // 检查依赖参数
-        $this->require('context');
         if ($this->code) {
             $this->loadAttributeByCode();
         }
@@ -217,6 +216,7 @@ class UserValueDecorator
      */
     private function loadAttributeByCode ()
     {
+        $this->require('context');
         $this->require('code');
         if (is_array($this->code)) {
             $mapped = $this->attributeModel()->whereIn('code', $this->code)
@@ -305,7 +305,6 @@ class UserValueDecorator
     private function getValue ()
     {
         // 检查依赖参数
-        $this->require('context');
         if ($this->code) {
             $this->loadAttributeByCode();
         }
@@ -397,7 +396,6 @@ class UserValueDecorator
     public function empty ()
     {
         // 检查依赖参数
-        $this->require('context');
         if ($this->code) {
             $this->loadAttributeByCode();
         }
@@ -418,7 +416,6 @@ class UserValueDecorator
     public function values ()
     {
         // 检查依赖参数
-        $this->require('context');
         $byCode = $this->code;
         if ($this->code && is_array($this->code)) {
             $this->loadAttributeByCode();
@@ -457,7 +454,6 @@ class UserValueDecorator
     public function history ()
     {
         // 检查依赖参数
-        $this->require('context');
         if ($this->code) {
             $this->loadAttributeByCode();
         }
