@@ -2,8 +2,7 @@
 
 namespace Goodwong\UserValue\Http\Controllers;
 
-use Goodwong\UserValue\Entities\UserAttribute;
-use Goodwong\UserValue\Handlers\UserDataHandler;
+use Goodwong\UserValue\UserValue;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -21,10 +20,7 @@ class UserIdController extends Controller
         // 按属性
         $attribute_id = $request->input('attribute');
         if ($attribute_id) {
-            $attribute = UserAttribute::findOrFail($attribute_id);
-            $handler = new UserDataHandler($attribute->context);
-            $user_ids = $handler->getUserIds($attribute_id, $request->input('sort_order'));
-
+            abort(403, '功能未完成……');
             return $this->paginate($user_ids, $request);
         }
         // filters
@@ -32,18 +28,13 @@ class UserIdController extends Controller
         $sort_attribute = $request->input('sort_attribute');
         $sort_order = $request->input('sort_order', 'desc');
         if ($filters) {
-            $handler = new UserDataHandler();
-            $user_ids = $handler->filterUserIds($filters, $sort_attribute, $sort_order);
+            abort(403, '功能未完成……');
             return $this->paginate($user_ids, $request);
         }
         // 按场景
         $context = $request->input('context');
-        $sort_attribute = $request->input('sort_attribute');
-        $sort_order = $request->input('sort_order', 'desc');
         if ($context) {
-            $handler = new UserDataHandler($context);
-            $user_ids = $handler->allUserIds($sort_attribute, $sort_order);
-
+            $user_ids = UserValue::context($context)->users();
             return $this->paginate($user_ids, $request);
         }
         // nothing
@@ -65,71 +56,5 @@ class UserIdController extends Controller
         $current_page = max(1, min($current_page, count($chunks)));
         $slice = data_get($chunks, $current_page - 1, []);
         return new LengthAwarePaginator($slice, count($data), $per_page, $current_page);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  integer  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  integer  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  integer  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  integer  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

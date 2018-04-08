@@ -2,8 +2,8 @@
 
 namespace Goodwong\UserValue\Http\Controllers;
 
-use Goodwong\UserValue\Entities\UserValue;
-use Goodwong\UserValue\Handlers\UserDataHandler;
+use Goodwong\UserValue\Entities\UserValue as UserValueEntity;
+use Goodwong\UserValue\UserValue;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -22,59 +22,58 @@ class UserValueController extends Controller
         $attributes = $request->input('attributes');
         $keyword = $request->input('keyword');
         if ($keyword) {
-            $handler = new UserDataHandler($context);
-            return $handler->search(explode(',', $attributes), $keyword);
+            abort('功能未完成……', 403);
         }
         // 多个用户数据（数据矩阵）
         $user_ids = $request->input('users');
         $attribute_ids = $request->input('attributes');
         if ($user_ids && $attribute_ids) {
-            $handler = new UserDataHandler();
-            return $handler->valuesOfMany(explode(',', $user_ids), explode(',', $attribute_ids));
+            return UserValue::context('_')
+                ->attribute(explode(',', $attribute_ids))
+                ->valuesOfMany(explode(',', $user_ids));
         }
         // 单个用户数据
         $user_id = $request->input('user');
         $attribute_ids = $request->input('attributes');
         if ($user_id && $attribute_ids) {
-            $handler = new UserDataHandler();
-            return $handler->values($user_id, explode(',', $attribute_ids));
+            return UserValue::user($user_id)
+                ->attribute(explode(',', $attribute_ids))
+                ->values();
         }
         // 单用户数据，按code搜索
         $user_id = $request->input('user');
+        $context = $request->input('context');
         $codes = $request->input('codes');
         if ($user_id && $codes) {
-            $values = array_map(function ($code) use ($user_id) {
-                $code = explode(':', $code);
-                if (count($code) < 2) {
-                    return null;
-                }
-                $value = (new UserDataHandler($code[0]))->getByCode($user_id, $code[1]);
-                if ($value) {
-                    $value->attribute_code = implode(':', $code);
-                }
-                return $value;
-            }, (array)explode(',', $codes));
-            return array_filter($values);
+            return UserValue::user($user_id)
+                ->context($context)
+                ->code(explode(',', $codes))
+                ->values();
+            // abort('功能未完成……', 403);
+            // $values = array_map(function ($code) use ($user_id) {
+            //     $code = explode(':', $code);
+            //     if (count($code) < 2) {
+            //         return null;
+            //     }
+            //     $value = (new UserDataHandler($code[0]))->getByCode($user_id, $code[1]);
+            //     if ($value) {
+            //         $value->attribute_code = implode(':', $code);
+            //     }
+            //     return $value;
+            // }, (array)explode(',', $codes));
+            // return array_filter($values);
         }
         // 数据历史
         $user_id = $request->input('user');
         $attribute_id = $request->input('attribute');
         if ($user_id && $attribute_id) {
-            $handler = new UserDataHandler();
-            return $handler->history($user_id, $attribute_id)->take(10);
+            return UserValue::user($user_id)
+                ->attribute($attribute_id)
+                ->history()
+                ->slice(0, 10);
         }
         // nothing
         return collect();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -90,8 +89,10 @@ class UserValueController extends Controller
         $attribute_id = $request->input('attribute');
         $value = $request->input('value');
         if ($user_id && $attribute_id) {
-            $handler = new UserDataHandler();
-            return response()->json($handler->set($user_id, $attribute_id, $value ?: ''));
+            UserValue::user($user_id)
+                ->attribute($attribute_id)
+                ->value($value);
+            return response('ok');
         }
         // by context & code
         $user_id = $request->input('user');
@@ -99,54 +100,24 @@ class UserValueController extends Controller
         $code = $request->input('code');
         $value = $request->input('value');
         if ($user_id && $context && $code) {
-            $handler = new UserDataHandler($context);
-            return response()->json($handler->setByCode($user_id, $code, $value ?: ''));
+            UserValue::user($user_id)
+                ->context($context)
+                ->code($code)
+                ->value($value);
+            return response()->json('ok');
         }
         abort(422);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \Goodwong\UserValue\Entities\UserValue  $userValue
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UserValue $userValue)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \Goodwong\UserValue\Entities\UserValue  $userValue
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserValue $userValue)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Goodwong\UserValue\Entities\UserValue  $userValue
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, UserValue $userValue)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
-     * @param  \Goodwong\UserValue\Entities\UserValue  $userValue
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserValue $userValue)
+    public function destroy($id)
     {
-        //
+        UserValueEntity::find($id)->delete();
+        return response('ok', 204);
     }
 }

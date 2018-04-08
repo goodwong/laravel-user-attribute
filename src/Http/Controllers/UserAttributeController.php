@@ -3,7 +3,6 @@
 namespace Goodwong\UserValue\Http\Controllers;
 
 use Goodwong\UserValue\Entities\UserAttribute;
-use Goodwong\UserValue\Handlers\UserDataHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -77,9 +76,6 @@ class UserAttributeController extends Controller
      */
     public function show(UserAttribute $userAttribute)
     {
-        if ($userAttribute->type === 'radio' || $userAttribute->type === 'checkbox') {
-            (new UserDataHandler())->updateOptions($userAttribute);
-        }
         return $userAttribute;
     }
 
