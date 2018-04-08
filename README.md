@@ -24,6 +24,7 @@ $user->group('联系方式') // 可选，默认“默认”，用于新创建的
      ->value('1D2312')
 
 // 按照id写入
+UserValue::user(15) // 可以不需要context
      ->attribute(15) // 属性ID 15，常用于用户自定义属性(没有code)
      ->value('1栋D座309');
 
@@ -33,30 +34,38 @@ $user->code('logs')->value('浏览「线上预约报名」', $forceWrite); // �
 
 // 支持文本、数字、数组、对象
 $contacts = (object)['name' => 'william', 'age' => 29];
-$user->code('contacts')->value($contacts);
+$user->code('contacts')
+    ->value($contacts);
 var_dump($user->code('contacts')->value())
 // => {#1159
 //      +"name": "william",
 //      +"age": 29,
 //    }
 
-$user->code('telephone')->value('13510614266');
+$user->code('telephone')
+    ->value('13510614266');
 var_dump($user->code('telephone')->value())
 // => "13510614266"
 
-$user->code('age')->value(29);
+$user->code('age')
+    ->value(29);
 var_dump($user->code('age')->value())
 // => 29
 
 
 // 其他方法
-$user->code('form#15 viewed')->increase();
-$user->code('reward')->increase(500);
-echo $user->code('reward')->increaseAndGet(500);
+$user->code('form#15 viewed')
+    ->increase();
+$user->code('reward')
+    ->increase(500);
+echo $user->code('reward')
+    ->increaseAndGet(500);
 
-$user->code('口味')->add('清淡'); // 只对数组或新属性操作，类型不对会抛出异常
+$user->code('口味')
+    ->add('清淡'); // 只对数组或新属性操作，类型不对会抛出异常
 var_dump($user->code('口味')->addAndGet('清淡'));
-$user->code('telephone')->empty();
+$user->code('telephone')
+    ->empty();
 
 
 
@@ -68,7 +77,9 @@ UserValue::user(15)
     ->code(['name', 'telephone', 'address'])
     ->values()
 // 返回：{ name: 'william', telephone: '13510614266', address: null } // 无数据则为null
-$user->attribute([1, 3, 51, 92])->values()
+UserValue::user(15)
+    ->attribute([1, 3, 51, 92])
+    ->values()
 // 返回：{ 1: 'william', 3: null, 51: '13510614266', 92: null } // 无数据则为null
 
 // ⚠️注意：
@@ -76,7 +87,8 @@ $user->attribute([1, 3, 51, 92])->values()
 // 2. context／reviser／group 则会一直记住
 
 // 获取数据修改历史
-$user->code('logs')->history()
+$user->code('logs')
+    ->history()
 // 返回：[{ user_id, reviser_id, attribute_id, value, created_at }]
 
 
@@ -88,15 +100,21 @@ $user->code('logs')->history()
 $handler = UserValue::context('global');
 
 // 搜索
-$handler->code('name')->search('测试') // 在 name 里面搜索“测试”
-$handler->code(['name', 'telephone'])->search('测试') // 在 name/telephone 里面搜索“测试”
-$handler->attribute(25)->search('测试') // 在 属性25... 里面搜索“测试”
-$handler->attribute([25, 34])->search('测试') // 在 属性25/34... 里面搜索“测试”
+$handler->code('name')
+    ->search('测试') // 在 name 里面搜索“测试”
+$handler->code(['name', 'telephone'])
+    ->search('测试') // 在 name/telephone 里面搜索“测试”
+$handler->attribute(25)
+    ->search('测试') // 在 属性25... 里面搜索“测试”
+$handler->attribute([25, 34])
+    ->search('测试') // 在 属性25/34... 里面搜索“测试”
 // 返回：[{ user_id, reviser_id, attribute_id, value, created_at }]
 
 // 查询多人的数据（适用于CRM大表格）
-$handler->code(['name', 'telephone'])->valuesOfMany($userIds = [1, 2, 3, 4, 5]);
-$handler->attribute([1, 2, 3, 4])->valuesOfMany($userIds = [1, 2, 3, 4, 5]);
+$handler->code(['name', 'telephone'])
+    ->valuesOfMany($userIds = [1, 2, 3, 4, 5]);
+$handler->attribute([1, 2, 3, 4])
+    ->valuesOfMany($userIds = [1, 2, 3, 4, 5]);
 // 返回：[{ user_id, reviser_id, attribute_id, value, created_at }]
 
 
