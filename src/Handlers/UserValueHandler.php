@@ -157,7 +157,7 @@ class UserValueHandler
          * 1. all ids / attribute ids, limit date
          */
         $this->require('context');
-        $query = $this->valueModel();
+        $query = $this->valueModel()->orderBy('id', 'desc');
         if ($this->attribute) {
             if (is_array($this->attribute)) {
                 throw new Exception("multiple attributes is not supported!");
