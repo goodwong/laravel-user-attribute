@@ -38,7 +38,7 @@ class Router
     public static function userValue()
     {
         Route::namespace('Goodwong\UserValue\Http\Controllers')->group(function () {
-            Route::resource('user-values', 'UserValueController');
+            Route::resource('user-values', 'UserValueController')->only('index', 'store', 'destroy');
         });
     }
 
@@ -50,7 +50,7 @@ class Router
     public static function userIdList()
     {
         Route::namespace('Goodwong\UserValue\Http\Controllers')->group(function () {
-            Route::resource('user-ids', 'UserIdController');
+            Route::resource('user-ids', 'UserIdController')->only('index');;
         });
     }
 }
