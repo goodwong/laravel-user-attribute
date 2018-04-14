@@ -161,7 +161,7 @@ class UserValueDecorator
      */
     public function value ($value = null, bool $forceWrite = false)
     {
-        if ($value) {
+        if ($value !== null) {
             // 设置
             $this->setValue($value, $forceWrite);
             // 清空属性
@@ -194,7 +194,7 @@ class UserValueDecorator
         // 保存数据
         $value = serialize($value);
         $exist = $this->valueModel()->where('attribute_id', $this->attribute)->first();
-        if ($exist && $exist->value == $value && !$forceWrite) {
+        if ($exist && $exist->value === $value && !$forceWrite) {
             return;
         }
         if ($exist) {
