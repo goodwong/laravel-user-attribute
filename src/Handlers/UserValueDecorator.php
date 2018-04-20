@@ -22,7 +22,7 @@ class UserValueDecorator
     /**
      * @var string $context 当前场景
      */
-    private $context;
+    private $context = 'default';
 
     /**
      * @var string $groupName 当前分组名称
