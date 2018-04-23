@@ -476,7 +476,7 @@ class UserValueDecorator
     private function require (string $field)
     {
         if (!$this->$field) {
-            throw new Exception("require {$field}, field value missing!");
+            throw new Exception("field `{$field}` missing!");
         }
     }
 }

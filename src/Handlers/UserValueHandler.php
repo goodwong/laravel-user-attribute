@@ -106,14 +106,31 @@ class UserValueHandler
     /**
      * search
      * 
+     * @param  string  $keyword
      * @return Collection 返回：[{ user_id, reviser_id, attribute_id, value, created_at }]
      */
-    public function search ()
+    public function search (string $keyword)
     {
+        // check
         $this->require('context');
         $this->require('attribute');
+
+        // search
+        $query = $this->valueModel();
+        if (is_array($this->attribute)) {
+            $query = $query->whereIn('attribute_id', $this->attribute);
+        } else {
+            $query = $query->where('attribute_id', $this->attribute);
+        }
+        $query = $query->where('value', 'like', "%{$keyword}%");
+        $values = $query->get(['user_id', 'reviser_id', 'attribute_id', 'value', 'created_at'])
+            ->each(function ($v) {
+                $v->value = unserialize($v->value);
+            });
+
+        // clear
         $this->clearup();
-        return;
+        return $values;
     }
 
     /**
@@ -124,8 +141,11 @@ class UserValueHandler
      */
     public function valuesOfMany ($userIds)
     {
+        // check
         $this->require('context');
         $this->require('attribute');
+
+        // query
         $query = $this->valueModel();
         if (is_array($this->attribute)) {
             $query = $query->whereIn('attribute_id', $this->attribute);
@@ -133,11 +153,14 @@ class UserValueHandler
             $query = $query->where('attribute_id', $this->attribute);
         }
         $query = $query->whereIn('user_id', $userIds);
-        $this->clearup();
-        return $query->get(['user_id', 'reviser_id', 'attribute_id', 'value', 'created_at'])
+        $values = $query->get(['user_id', 'reviser_id', 'attribute_id', 'value', 'created_at'])
             ->each(function ($v) {
                 $v->value = unserialize($v->value);
             });
+
+        // clear
+        $this->clearup();
+        return $values;
     }
 
     /**
@@ -237,7 +260,10 @@ class UserValueHandler
                 $all = array_intersect($all, $filterFinds); // 交集
             }
         }
+
+        // clear
         $this->clearup();
+
         return array_values(array_unique($all));
     }
 
@@ -359,7 +385,7 @@ class UserValueHandler
     private function require (string $field)
     {
         if (!$this->$field) {
-            throw new Exception("require {$field}, field value missing!");
+            throw new Exception("field `{$field}` missing!");
         }
     }
 
