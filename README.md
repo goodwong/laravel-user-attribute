@@ -123,7 +123,9 @@ echo $user->code('reward')
 > 只对数组或新属性操作，类型不对会抛出异常
 ```php
 $user->code('口味')->add('清淡');
+$user->code('口味')->add(['清淡', '爽口']);
 var_dump($user->code('口味')->addAndGet('清淡'));
+var_dump($user->code('口味')->addAndGet(['清淡', '爽口']));
 ```
 
 

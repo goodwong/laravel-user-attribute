@@ -359,7 +359,7 @@ class UserValueDecorator
     /**
      * add item to set
      * 
-     * @param  string  $item
+     * @param  string|array  $item
      * @return self
      */
     public function add ($item)
@@ -371,7 +371,7 @@ class UserValueDecorator
     /**
      * add item to set and get value
      * 
-     * @param  string  $item
+     * @param  string|array  $item
      * @return array
      */
     public function addAndGet ($item)
@@ -380,10 +380,11 @@ class UserValueDecorator
         if (!$old) {
             $old = [];
         }
-        array_push($old, $item);
-        $old = array_map(function ($v) { return trim($v); }, $old);
-        sort($old);
-        $value = array_unique($old);
+        $items = is_array($item) ? $item : [$item];
+        $items = array_merge($old, $items);
+        $items = array_map(function ($v) { return trim($v); }, $items);
+        sort($items);
+        $value = array_unique($items);
         $this->setValue($value);
         // 清空属性
         $this->attribute = null;
